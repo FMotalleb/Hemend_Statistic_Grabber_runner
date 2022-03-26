@@ -3,16 +3,18 @@ import pandas as pd
 from configparser import ConfigParser as cfgParser
 from datetime import datetime
 import time
-import getch
+import sys
+# import getch
 
 configDir = './config/'
 settingsPath = configDir+'settings.ini'
+shouldDelete = '--dellog' in sys.argv
 
-shouldDelete = False
-
+print('will delete file ' + str(shouldDelete))
 print('loading settings')
 settings = cfgParser()
 settings.read(settingsPath)
+
 
 # load output file path and user mapper
 PLAIN_OUTPUT_FILE = settings.get('Path', 'PLAIN_OUTPUT_FILE')
@@ -70,7 +72,7 @@ while(fileReader):
     print(line)
     if line.rfind(TEXT_FORMATTER_SUFFIX) >= 0:
         fileReader = False
-    if line.rfind(TEXT_FORMATTER_ERROR):
+    if line.rfind(TEXT_FORMATTER_ERROR) >= 0:
         raise Exception(
             "File is not found or there is error in log file reader method if you know there should be a file please restart the board otherwise use a tag on board and try again")
 logData = logData.replace(TEXT_FORMATTER_BOOT, '')
@@ -108,4 +110,4 @@ f.write('ID,DATE_TIME'+logData)
 f.close()
 
 print('done! press any key to close.')
-getch.getch()
+# getch.getch()
