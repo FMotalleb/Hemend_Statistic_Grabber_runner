@@ -51,12 +51,13 @@ def sendCommand(command):
 
 
 waitingForBoot = True
-while(waitingForBoot):
-    line = str(serialClient.readline().decode(BASE_ENCODING))
-    if line.rfind(TEXT_FORMATTER_SUFFIX) >= 0:
-        waitingForBoot = False
+time.sleep(7)
+# while(waitingForBoot):
+#     line = str(serialClient.readline().decode(BASE_ENCODING))
+#     if line.rfind(TEXT_FORMATTER_SUFFIX) >= 0:
+#         waitingForBoot = False
 print('Boot Completed')
-time.sleep(1)
+
 
 print('sync time')
 timeCommand = SET_TIME_COMMAND.replace('#year', str(datetime.now().year).rjust(4, '0')).replace('#month', str(datetime.now().month).rjust(2, '0')).replace('#day', str(datetime.now().day).rjust(2, '0')).replace('#hour', str(
