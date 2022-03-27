@@ -19,11 +19,12 @@ settings.read(settingsPath)
 
 
 # load output file path and user mapper
-PLAIN_OUTPUT_FILE = settings.get('Path', 'PLAIN_OUTPUT_FILE')
-BACKUP_OUTPUT_FILE = settings.get('Path', 'BACKUP_OUTPUT_FILE')
-FINAL_OUTPUT_FILE = settings.get('Path', 'FINAL_OUTPUT_FILE')
-USERS_DICTIONARY_FILE = settings.get('Path', 'USERS_DICTIONARY_FILE')
-usersMap = pd.read_csv(USERS_DICTIONARY_FILE)
+PLAIN_OUTPUT_CSV_FILE = settings.get('Path', 'PLAIN_OUTPUT_CSV_FILE')
+BACKUP_OUTPUT_CSV_FILE = settings.get('Path', 'BACKUP_OUTPUT_CSV_FILE')
+FINAL_OUTPUT_CSV_FILE = settings.get('Path', 'FINAL_OUTPUT_CSV_FILE')
+FINAL_OUTPUT_XLSX_FILE = settings.get('Path', 'FINAL_OUTPUT_XLSX_FILE')
+USERS_DICTIONARY_CSV_FILE = settings.get('Path', 'USERS_DICTIONARY_CSV_FILE')
+usersMap = pd.read_csv(USERS_DICTIONARY_CSV_FILE)
 
 # board info
 SERIAL_PORT_NAME = settings.get('SerialConfig', 'SERIAL_PORT_NAME')
@@ -92,7 +93,7 @@ else:
 
 
 print('writing to backup')
-f = open(BACKUP_OUTPUT_FILE, "a")
+f = open(BACKUP_OUTPUT_CSV_FILE, "a")
 f.write(logData)
 f.close()
 
@@ -109,16 +110,17 @@ for index, row in usersMap.iterrows():
 logData = logData.replace('\n\n', '\n')
 
 
-f = open(PLAIN_OUTPUT_FILE, "w")
+f = open(PLAIN_OUTPUT_CSV_FILE, "w")
 f.write('ID,DATE_TIME'+logData)
 f.close()
 
 
 # reformat data
-data = pd.read_csv(PLAIN_OUTPUT_FILE)
+data = pd.read_csv(PLAIN_OUTPUT_CSV_FILE)
 for index, row in data.iterrows():
     row['DATE_TIME'] = formatDateTime(row['DATE_TIME'])
-data.to_csv(FINAL_OUTPUT_FILE)
+data.to_csv(FINAL_OUTPUT_CSV_FILE)
+data.to_excel(FINAL_OUTPUT_XLSX_FILE)
 
 
 # f = open(FINAL_OUTPUT_FILE, "w")
