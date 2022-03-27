@@ -11,7 +11,7 @@ import sys
 configDir = './config/'
 settingsPath = configDir+'settings.ini'
 shouldDelete = '--dellog' in sys.argv
-
+dateTimeTemp = jd.now().isoformat()
 print('will delete file ' + str(shouldDelete))
 print('loading settings')
 settings = cfgParser()
@@ -19,10 +19,14 @@ settings.read(settingsPath)
 
 
 # load output file path and user mapper
-PLAIN_OUTPUT_CSV_FILE = settings.get('Path', 'PLAIN_OUTPUT_CSV_FILE')
-BACKUP_OUTPUT_CSV_FILE = settings.get('Path', 'BACKUP_OUTPUT_CSV_FILE')
-FINAL_OUTPUT_CSV_FILE = settings.get('Path', 'FINAL_OUTPUT_CSV_FILE')
-FINAL_OUTPUT_XLSX_FILE = settings.get('Path', 'FINAL_OUTPUT_XLSX_FILE')
+PLAIN_OUTPUT_CSV_FILE = settings.get(
+    'Path', 'PLAIN_OUTPUT_CSV_FILE').replace('%dt', dateTimeTemp)
+BACKUP_OUTPUT_CSV_FILE = settings.get(
+    'Path', 'BACKUP_OUTPUT_CSV_FILE').replace('%dt', dateTimeTemp)
+FINAL_OUTPUT_CSV_FILE = settings.get(
+    'Path', 'FINAL_OUTPUT_CSV_FILE').replace('%dt', dateTimeTemp)
+FINAL_OUTPUT_XLSX_FILE = settings.get(
+    'Path', 'FINAL_OUTPUT_XLSX_FILE').replace('%dt', dateTimeTemp)
 USERS_DICTIONARY_CSV_FILE = settings.get('Path', 'USERS_DICTIONARY_CSV_FILE')
 usersMap = pd.read_csv(USERS_DICTIONARY_CSV_FILE)
 

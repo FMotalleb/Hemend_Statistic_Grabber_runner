@@ -1,4 +1,4 @@
 result.csv
 output/backup.csv
 output/plainData.csv
-result.xlsx
+*.xlsx
