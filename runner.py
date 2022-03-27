@@ -2,6 +2,8 @@ import serial
 import pandas as pd
 from configparser import ConfigParser as cfgParser
 from datetime import datetime
+from persiantools.jdatetime import JalaliDateTime as jd
+
 import time
 import sys
 # import getch
@@ -94,9 +96,10 @@ f = open(BACKUP_OUTPUT_FILE, "a")
 f.write(logData)
 f.close()
 
-f = open(PLAIN_OUTPUT_FILE, "w")
-f.write('ID,DATE_TIME'+logData)
-f.close()
+
+def formatDateTime(input):
+    date = datetime.fromisoformat(input)
+    return (jd.to_jalali(date).isoformat())
 
 
 print('final formatting')
@@ -105,9 +108,22 @@ for index, row in usersMap.iterrows():
     logData = logData.replace(row['BOARD_ID'], row['USER_ID'])
 logData = logData.replace('\n\n', '\n')
 
-f = open(FINAL_OUTPUT_FILE, "w")
+
+f = open(PLAIN_OUTPUT_FILE, "w")
 f.write('ID,DATE_TIME'+logData)
 f.close()
+
+
+# reformat data
+data = pd.read_csv(PLAIN_OUTPUT_FILE)
+for index, row in data.iterrows():
+    row['DATE_TIME'] = formatDateTime(row['DATE_TIME'])
+data.to_csv(FINAL_OUTPUT_FILE)
+
+
+# f = open(FINAL_OUTPUT_FILE, "w")
+# f.write('ID,DATE_TIME'+logData)
+# f.close()
 
 print('done! press any key to close.')
 # getch.getch()
