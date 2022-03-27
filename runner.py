@@ -6,11 +6,15 @@ from persiantools.jdatetime import JalaliDateTime as jd
 
 import time
 import sys
-# import getch
+
+
+def delay(seconds: float):
+    time.sleep(seconds)
+
 
 configDir = './config/'
 settingsPath = configDir+'settings.ini'
-shouldDelete = '--dellog' in sys.argv
+
 dateTimeTemp = jd.now().isoformat()
 print('will delete file ' + str(shouldDelete))
 print('loading settings')
@@ -61,13 +65,13 @@ while(waitingForBoot):
     if line.rfind(TEXT_FORMATTER_BOOT) >= 0:
         waitingForBoot = False
 print('Boot Completed')
-time.sleep(1)
+delay(1)
 
 print('sync time')
 timeCommand = SET_TIME_COMMAND.replace('#year', str(datetime.now().year).rjust(4, '0')).replace('#month', str(datetime.now().month).rjust(2, '0')).replace('#day', str(datetime.now().day).rjust(2, '0')).replace('#hour', str(
     datetime.now().hour).rjust(2, '0')).replace('#minute', str(datetime.now().minute).rjust(2, '0')).replace('#seconds', str(datetime.now().second).rjust(2, '0')).replace('12OfWeek', str((datetime.now().weekday()+1) % 7+1))
 sendCommand(timeCommand)
-time.sleep(1)
+delay(1)
 
 print('reading log file')
 sendCommand(READ_FILE_COMMAND)
@@ -87,13 +91,13 @@ logData = logData.replace(TEXT_FORMATTER_PREFIX, '')
 logData = logData.replace(TEXT_FORMATTER_SUFFIX, '')
 logData.replace('\r\n', '\n')
 logData.replace('\r', '')
-time.sleep(1)
+delay(1)
 
-if shouldDelete:
-    print('delete log')
-    sendCommand(DELETE_FILE_COMMAND)
-else:
-    print('skipping delete section')
+
+for i in sys.argv:
+    print('sending command : '+i)
+    sendCommand(i)
+    delay(1)
 
 
 print('writing to backup')
