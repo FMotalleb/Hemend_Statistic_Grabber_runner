@@ -99,7 +99,7 @@ f.close()
 
 def formatDateTime(input):
     date = datetime.fromisoformat(input)
-    return (jd.to_jalali(date).isoformat())
+    return (jd.to_jalali(date).isoformat().replace('T', ' '))
 
 
 print('final formatting')
